@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 Daniel Goulding
 14511512
 
-ASSIGNMENT: COMPLETE functions plot_fsc, plot_fse below
+ASSIGNMENT: COMPLETE functions plot_fsc(), plot_fse() below
 """
 
 """
@@ -90,21 +90,15 @@ def plot_fse(f, N_max, x, dx, name, filename):
     # ax = fig.subplots(111)
     # print(type(ax))
     # 2. call fse to compute the error for each xe in x, then sum
-    error = fse(x, f, a_0, a, b, N_max)
-    summer = sum(error)
+    error = [sum([fse(xe, f, a_0, a, b, N) for xe in x]) for N in range(0, N_max)]
     # 3. plot Fourier series representation error vs. N
-    print(np.shape(x))
-    print(np.shape(a))
-    print(np.shape(b))
-    print(np.shape(a_0))
-    print(np.shape(error))
-    print(summer)
-    print(np.shape(N_max))
     fig = plt.figure()
-    plt.bar(np.linspace(0,200,1),a)
-    plt.bar(np.linspace(0,200,1),b)
-    plt.plot(x,error)
-    plt.show()
+    ax = fig.add_subplot(111)
+    ax.bar(range(0,N_max),error)
+    ax.set_title(f"Error for {name}")
+    plt.ylabel("Error")
+    plt.xlabel("N")
+    plt.savefig(filename)
 
 """
 COMPLETE:
@@ -128,15 +122,21 @@ Your code should do the following
 # Plot Fourier series coefficients
 def plot_fsc(f, N_max, x, dx, name, filename):
     # 1. get all Fourier series coefficients
-    fig = plt.figure() 
     a_0, a, b = fsc_all(N_max, f, x, dx)
     # 2. set a_0 and b_0 = 0 as first elements of a, b
-    a = list(a_0) + a
-    b = [0] + b
+    # a.insert(0,a_0) 
+    a = [a_0] + a
+    b_0 = 0
+    b = [b_0] + b
+    # b.insert(0,0)
     # 3. plot Fourier series coefficients a, b
-    plt.bar(np.linspace(0,a),a)
-    plt.bar(np.linspace(0,b),b)
-    plt.show()
+    fig = plt.figure() 
+    ax1 = fig.add_subplot(211)
+    ax2 = fig.add_subplot(212)
+    ax1.bar(range(N_max+1),a)
+    ax1.set_title(f"Coefficents for a and b for {name}")
+    ax2.bar(range(N_max+1),b)
+    plt.savefig(f"{filename}")
 
 # sample periodic functions (signals)
 def f_square(x): return np.where(x >= 0, 1, 0)

@@ -1,7 +1,7 @@
 #include "house.h"
 #include <stdio.h>
 #include <string.h>
-/*converts choice to x,y*/
+/*helper function to converts choice to x,y*/
 void choice_to_xy(int choice, int *xbuf, int *ybuf)
 {
   *xbuf = (choice + 2) % 3;
